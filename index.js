@@ -18,7 +18,7 @@ app.use(
 // app.use(cookieParser());
 app.use(
     cookieSession({
-        secret: "I'm always angry",
+        secret: "Hello There, General Kenobi",
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
-    if (req.cookies.signed) {
+    if (req.session.signed) {
         res.redirect("thank-you");
     } else {
         res.render("petition", {});
@@ -40,12 +40,13 @@ app.get("/petition", (req, res) => {
 let firstName;
 let lastName;
 let signature;
+let signIdNo;
 
 app.post("/petition", (req, res) => {
     firstName = req.body["first-name"];
     lastName = req.body["last-name"];
     signature = req.body.signature;
-    console.log("line 32: ", req.body);
+    // console.log("line 32: ", req.body);
     if (firstName === "" || lastName === "" || signature === "") {
         res.render("petition", {
             error: "something went wrong, try again!",
@@ -55,20 +56,41 @@ app.post("/petition", (req, res) => {
         console.log("line 44", "redirect back");
     } else {
         db.addMusician(firstName, lastName, signature)
-            .then(("WHERE RETURNING CAN GO") => {
+            .then((id) => {
+                signIdNo = id.rows[0].id;
+                console.log("signature ID number", signIdNo);
+                req.session.signed = true;
+                req.session.signId = signIdNo;
+                res.redirect("/thank-you");
                 return console.log("worked");
             })
             .catch((err) => {
                 console.log("error in add musician: ", err);
             });
         // console.log("linte 45: ", firstName, lastName, signature);
-        res.cookie("signed", true);
-        res.redirect("/thank-you");
     }
 });
 
 app.get("/thank-you", (req, res) => {
-    res.render("thank-you", {});
+    let numOfSigners;
+    db.getMusicians().then((data) => {
+        numOfSigners = data.rows.length;
+        console.log("num of signers: ", numOfSigners);
+        res.render("thank-you", {
+            num: numOfSigners,
+        });
+    });
+});
+
+app.get("/our-signers", (req, res) => {
+    let ourSigners;
+    db.getMusicians().then((data) => {
+        ourSigners = data.rows;
+        console.log("OUR SIGNERS", ourSigners);
+        res.render("our-signers", {
+            ourSigners,
+        });
+    });
 });
 
 app.listen(8080, () => {

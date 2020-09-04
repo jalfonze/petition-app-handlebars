@@ -1,23 +1,39 @@
 (function () {
     const canvas = document.querySelector("#signHere");
     // const ctx = canvas.getContext("2d");
-    const backDrop = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
     const dataURL = canvas.toDataURL();
+    let left = canvas.offsetLeft;
+    let top = canvas.offsetTop;
     let hiddenInput = document.getElementById("inputHidden");
 
     // console.log("hiddeninput Value: ", hiddenInputValue);
     console.log("hiddeninput Value new: ", hiddenInput.value);
+    // console.log("line 7 script: ", dataURL);
 
-    console.log("line 7 script: ", dataURL);
+    let signature = false;
+
+    canvas.addEventListener("mousedown", () => {
+        signature = true;
+    });
+
+    canvas.addEventListener("mouseup", () => {
+        signature = false;
+        hiddenInput.value = dataURL;
+        ctx.beginPath();
+    });
 
     canvas.addEventListener("mousemove", (e) => {
-        hiddenInput.value = dataURL;
+        if (!signature) {
+            return;
+        }
         // backDrop.beginPath();
         // backDrop.fillStyle = "rgb(185, 185, 185)";
         // backDrop.fillRect(0, 0, 250, 70);
-        backDrop.lineWidth = 10;
-        backDrop.lineTo(e.clientX, e.clientY);
-        backDrop.stroke();
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.lineTo(e.clientX - left, e.clientY - top);
+        ctx.stroke();
     });
 
     // canvas.addEventListener("mousemove", (e) => {});
