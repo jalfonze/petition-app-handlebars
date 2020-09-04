@@ -6,6 +6,17 @@ module.exports.getMusicians = () => {
     return db.query(`SELECT * FROM signatures`);
 };
 
+module.exports.showSignature = (idNo) => {
+    return db.query(
+        `
+        SELECT signature 
+        FROM signatures
+        WHERE id = ($1)
+        `,
+        [idNo]
+    );
+};
+
 module.exports.addMusician = (first, last, sig) => {
     return db.query(
         `

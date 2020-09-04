@@ -73,12 +73,18 @@ app.post("/petition", (req, res) => {
 
 app.get("/thank-you", (req, res) => {
     let numOfSigners;
+    let pic;
+    db.showSignature(req.session.signId).then((signedData) => {
+        console.log("SIGNATURE URL: ", signedData.rows[0].signature);
+        pic = signedData.rows[0].signature;
+        res.render("thank-you", {
+            num: numOfSigners,
+            pic,
+        });
+    });
     db.getMusicians().then((data) => {
         numOfSigners = data.rows.length;
         console.log("num of signers: ", numOfSigners);
-        res.render("thank-you", {
-            num: numOfSigners,
-        });
     });
 });
 

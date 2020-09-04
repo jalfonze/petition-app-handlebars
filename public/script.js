@@ -23,6 +23,11 @@
         ctx.beginPath();
     });
 
+    window.addEventListener("resize", (e) => {
+        e.clientX - left;
+        e.clientY - top;
+    });
+
     canvas.addEventListener("mousemove", (e) => {
         if (!signature) {
             return;
