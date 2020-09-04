@@ -5,6 +5,7 @@ const db = require("./db");
 const handlebars = require("express-handlebars");
 // const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
+const csurf = require("csurf");
 
 app.engine("handlebars", handlebars());
 app.set("view engine", "handlebars");
@@ -22,6 +23,14 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
+app.use(csurf);
+app.use(function (req, res, next) {
+    //csrfToken for templates
+    res.locals.csrfToken = req.csrfToken();
+    //prevents click jacking
+    res.setHeader("x-frame-options", "deny");
+    next();
+});
 
 app.use(express.static("./public"));
 
@@ -72,19 +81,20 @@ app.post("/petition", (req, res) => {
 });
 
 app.get("/thank-you", (req, res) => {
-    let numOfSigners;
-    let pic;
     db.showSignature(req.session.signId).then((signedData) => {
-        console.log("SIGNATURE URL: ", signedData.rows[0].signature);
-        pic = signedData.rows[0].signature;
-        res.render("thank-you", {
-            num: numOfSigners,
-            pic,
+        db.getMusicians().then((data) => {
+            let numOfSigners = data.rows.length;
+            // console.log("num of signers: ", numOfSigners);
+            let pic = signedData.rows[0].signature;
+            console.log("SIGNATURE PIC: ", pic);
+            console.log("num of signers: ", numOfSigners);
+            res.render("thank-you", {
+                num: numOfSigners,
+                pic,
+            });
         });
-    });
-    db.getMusicians().then((data) => {
-        numOfSigners = data.rows.length;
-        console.log("num of signers: ", numOfSigners);
+        // console.log("SIGNED DATA: ", signedData);
+        // console.log("SIGNATURE URL: ", signedData.rows[0].signature);
     });
 });
 

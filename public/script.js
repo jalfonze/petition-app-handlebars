@@ -2,7 +2,7 @@
     const canvas = document.querySelector("#signHere");
     // const ctx = canvas.getContext("2d");
     const ctx = canvas.getContext("2d");
-    const dataURL = canvas.toDataURL();
+
     let left = canvas.offsetLeft;
     let top = canvas.offsetTop;
     let hiddenInput = document.getElementById("inputHidden");
@@ -19,6 +19,8 @@
 
     canvas.addEventListener("mouseup", () => {
         signature = false;
+        const dataURL = canvas.toDataURL();
+        console.log("dataUrl: ", dataURL);
         hiddenInput.value = dataURL;
         ctx.beginPath();
     });

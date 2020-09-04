@@ -12,6 +12,7 @@ method="POST">
     <input type="text" name="last-name" value="" placeholder="Last Name">
     <canvas id="signHere" width="250" height="70px" name="signature"></canvas>
     <input id="inputHidden" type="hidden" name="signature" value="">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <button>Submit</button>
 </form>
     <div class="error">
