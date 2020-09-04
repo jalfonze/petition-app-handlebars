@@ -1,0 +1,11 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+#signHere {
+    border: dotted black 2px;
+}
+
+.red {
+    background-color: red;
+}
