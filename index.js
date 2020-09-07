@@ -93,9 +93,28 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    db.getUsers().then((email) => {
-        console.log("LINE 96: ", email);
-    });
+    let { emailLogin, passwordLogin } = req.body;
+    console.log("LOG IN req.body: ", req.body);
+    if (emailLogin === "" || passwordLogin === "") {
+        res.render("login", {
+            error: "boxes cannot be empty",
+            red: "red",
+        });
+    } else {
+        db.getUsers(emailLogin)
+            .then((valid) => {
+                if (valid) {
+                    console.log(valid.rows[0].password);
+                }
+            })
+            .catch((err) => {
+                console.log("error in get users: ", err);
+                res.render("login", {
+                    error: "email not valid",
+                    red: "red",
+                });
+            });
+    }
 });
 
 app.get("/petition", (req, res) => {

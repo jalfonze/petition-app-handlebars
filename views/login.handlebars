@@ -1,5 +1,13 @@
+<div class="headerLogin">
 <h1>Please enter your credentials to log in</h1>
+</div>
 
+<div class="mainLogin {{red}}">
+    <div class="error">
+        {{#if error}}
+    <h2 class="errMsg">{{error}}</h2>
+        {{/if}}
+    </div>
 <form action="#" method="POST">
     <p>Email</p>
     <input type="email" name="emailLogin" value="" placeholder="Type email here">
@@ -8,3 +16,4 @@
     <p>Click to submit</p>
     <button>Submit</button>
 </form>
+</div>
