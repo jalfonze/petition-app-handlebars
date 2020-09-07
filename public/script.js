@@ -1,10 +1,7 @@
 (function () {
     const canvas = document.querySelector("#signHere");
-    // const ctx = canvas.getContext("2d");
+    const backDrop = canvas.getContext("2d");
     const ctx = canvas.getContext("2d");
-
-    let left = canvas.offsetLeft;
-    let top = canvas.offsetTop;
     let hiddenInput = document.getElementById("inputHidden");
 
     // console.log("hiddeninput Value: ", hiddenInputValue);
@@ -25,21 +22,16 @@
         ctx.beginPath();
     });
 
-    window.addEventListener("resize", (e) => {
-        e.clientX - left;
-        e.clientY - top;
-    });
-
+    backDrop.beginPath();
+    backDrop.fillStyle = "rgb(230, 227, 227)";
+    backDrop.fillRect(0, 0, 400, 70);
     canvas.addEventListener("mousemove", (e) => {
         if (!signature) {
             return;
         }
-        // backDrop.beginPath();
-        // backDrop.fillStyle = "rgb(185, 185, 185)";
-        // backDrop.fillRect(0, 0, 250, 70);
         ctx.lineWidth = 2;
         ctx.lineCap = "round";
-        ctx.lineTo(e.clientX - left, e.clientY - top);
+        ctx.lineTo(e.offsetX, e.offsetY);
         ctx.stroke();
     });
 

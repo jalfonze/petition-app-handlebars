@@ -1,8 +1,17 @@
-<h1>Our Signers</h1>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos cupiditate magni corporis nesciunt libero autem sunt adipisci ratione iste exercitationem. Minus odio aspernatur in exercitationem, enim nam itaque architecto voluptatum.</p>
+<nav></nav>
+<div class="main">
+<div class="titleSign">
+    <h1>Our Signers</h1>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos cupiditate magni corporis nesciunt libero autem sunt adipisci ratione iste exercitationem. Minus odio aspernatur in exercitationem, enim nam itaque architecto voluptatum.</p>
+</div>
+<div class="signersList">
+    {{#ourSigners}}
+    <h1>{{first}} {{last}}</h1>
+    <p>{{created_at}}</p>
+    <div class="linebreak"></div>
+    {{/ourSigners}}
 
-{{#ourSigners}}
-<h1>{{first}} {{last}}</h1>
-{{/ourSigners}}
+</div>
+</div>
 
 

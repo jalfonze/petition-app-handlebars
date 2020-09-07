@@ -1,19 +1,24 @@
+<nav></nav>
 
-
-<div class="header {{red}}">
+<div class="header">
     <h1>Sign Our Petition!</h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, necessitatibus. Exercitationem soluta mollitia non optio, nihil similique, possimus, iusto sequi delectus iure obcaecati aspernatur itaque? Ut asperiores cumque a hic.</p>
+    <p>We are petitioning to make sure that every bar or vanue that have musicians play at their establishment get paid! You wouldn't go to a restaurant and ask for free food now would you?</p>
 </div>
 
-<div class="main">
+<div class="main {{red}}">
 <form action="#"
 method="POST">
+    <div>
     <input type="text" name="first-name" value="" placeholder="First Name">
     <input type="text" name="last-name" value="" placeholder="Last Name">
-    <canvas id="signHere" width="250" height="70px" name="signature"></canvas>
+    </div>
+    <p>Please sign here</p>
+    <canvas id="signHere" width="400" height="70px" name="signature"></canvas>
     <input id="inputHidden" type="hidden" name="signature" value="">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <div class="divBtn">
     <button>Submit</button>
+    </div>
 </form>
     <div class="error">
         {{#if error}}

@@ -1,8 +1,15 @@
-<h1>Thank you for signing!
-</h1>
+<nav></nav>
+<div class="mainThanks">
+<h1>Thank you for signing {{last}}!</h1>
 
-<h3>here is your signature</h3>
-<img src={{pic}} alt="signature">
+<h3>here is your signature...</h3>
+<img class="sigBox" src={{pic}} alt="signature">
 
-<h2> we currently have {{num}} signers</h2>
-<button><a href="/our-signers">click here to see the list of them!</a></button>
+
+<h2> Thanks to you, we now have <span>{{num}}</span> signers!</h2>
+<div class="nxtBtn">
+<button><a href="/our-signers">Click here to see the list of them!</a></button>
+
+</div>
+
+</div>

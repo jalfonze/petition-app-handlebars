@@ -9,7 +9,7 @@ module.exports.getMusicians = () => {
 module.exports.showSignature = (idNo) => {
     return db.query(
         `
-        SELECT signature 
+        SELECT signature, first
         FROM signatures
         WHERE id = ($1)
         `,

@@ -5,7 +5,7 @@ const db = require("./db");
 const handlebars = require("express-handlebars");
 // const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
-const csurf = require("csurf");
+// const csurf = require("csurf");
 
 app.engine("handlebars", handlebars());
 app.set("view engine", "handlebars");
@@ -23,14 +23,15 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
-app.use(csurf);
-app.use(function (req, res, next) {
-    //csrfToken for templates
-    res.locals.csrfToken = req.csrfToken();
-    //prevents click jacking
-    res.setHeader("x-frame-options", "deny");
-    next();
-});
+// app.use(csurf);
+
+// app.use(function (req, res, next) {
+//     //csrfToken for templates
+//     res.locals.csrfToken = req.csrfToken();
+//     //prevents click jacking
+//     res.setHeader("x-frame-options", "deny");
+//     next();
+// });
 
 app.use(express.static("./public"));
 
@@ -85,12 +86,15 @@ app.get("/thank-you", (req, res) => {
         db.getMusicians().then((data) => {
             let numOfSigners = data.rows.length;
             // console.log("num of signers: ", numOfSigners);
+            let first = signedData.rows[0].first;
+            // console.log("first NAME: ", first);
             let pic = signedData.rows[0].signature;
-            console.log("SIGNATURE PIC: ", pic);
-            console.log("num of signers: ", numOfSigners);
+            // console.log("SIGNATURE PIC: ", pic);
+            // console.log("num of signers: ", numOfSigners);
             res.render("thank-you", {
                 num: numOfSigners,
                 pic,
+                first,
             });
         });
         // console.log("SIGNED DATA: ", signedData);
@@ -99,10 +103,9 @@ app.get("/thank-you", (req, res) => {
 });
 
 app.get("/our-signers", (req, res) => {
-    let ourSigners;
     db.getMusicians().then((data) => {
-        ourSigners = data.rows;
-        console.log("OUR SIGNERS", ourSigners);
+        let ourSigners = data.rows;
+        // console.log("OUR SIGNERS", ourSigners);
         res.render("our-signers", {
             ourSigners,
         });
