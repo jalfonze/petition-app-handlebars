@@ -35,7 +35,7 @@ app.use(
 app.use(express.static("./public"));
 
 app.get("/", (req, res) => {
-    res.redirect("/login");
+    res.redirect("/register");
 });
 
 app.get("/register", (req, res) => {
@@ -62,9 +62,9 @@ app.post("/register", (req, res) => {
         } else {
             console.log("line 63: ", req.body);
             db.addUsers(first_name, last_name, email, newPass)
-                .then((userId) => {
+                .then((resultObj) => {
                     // console.log("user: ", userId.rows[0].id);
-                    let userNum = userId.rows[0].id;
+                    let userNum = resultObj.rows[0].id;
                     req.session.registered = true;
                     req.session.signedIn = true;
                     req.session.userId = userNum;
@@ -83,7 +83,7 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    if (req.session.registered) {
+    if (req.session.loggedId) {
         res.redirect("/petition");
     } else if (!req.session.registered) {
         res.render("login");
@@ -104,7 +104,24 @@ app.post("/login", (req, res) => {
         db.getUsers(emailLogin)
             .then((valid) => {
                 if (valid) {
-                    console.log(valid.rows[0].password);
+                    bc.compare(passwordLogin, valid.rows[0].password).then(
+                        (result) => {
+                            let userId = valid.rows[0].id;
+                            console.log(result);
+                            if (result) {
+                                console.log("WORKED");
+                                req.session.loggedId = userId;
+                                res.redirect("/petition");
+                            } else {
+                                console.log("DENIED");
+                                res.render("login", {
+                                    error:
+                                        "email and password not a match, try again!",
+                                    red: "red",
+                                });
+                            }
+                        }
+                    );
                 }
             })
             .catch((err) => {
@@ -194,7 +211,4 @@ app.listen(8080, () => {
     console.log("petition server is listening...");
 });
 
-// need to get thank you page and input number of signers via getMusicians()
-//need to loop through the data form getMusicians() push them into an array, get the amount via liength
-//use handlebars to put this info in the thank-you page with render??
-//need to get our signers and input the list of signers on to that page
+// SET RIGHT COOKIES TO RIGHT FORMS
