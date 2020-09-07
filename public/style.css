@@ -14,6 +14,14 @@ nav {
     height: 70px;
 }
 
+/* REGISTER PAGE */
+
+.register-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* PETITION PAGE */
 #signHere {
     border: dotted black 2px;

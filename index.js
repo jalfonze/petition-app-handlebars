@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 const db = require("./db");
+const bc = require("./bc");
 
 const handlebars = require("express-handlebars");
-// const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 // const csurf = require("csurf");
 
@@ -16,7 +16,6 @@ app.use(
     })
 );
 
-// app.use(cookieParser());
 app.use(
     cookieSession({
         secret: "Hello There, General Kenobi",
@@ -36,7 +35,67 @@ app.use(
 app.use(express.static("./public"));
 
 app.get("/", (req, res) => {
-    res.redirect("/petition");
+    res.redirect("/login");
+});
+
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
+app.post("/register", (req, res) => {
+    let { first_name, last_name, email, password } = req.body;
+    bc.hash(password).then((hashedPW) => {
+        // console.log("HashedPW: ", hashedPW);
+        req.body.password = hashedPW;
+        let newPass = req.body.password;
+        // console.log("password: ", password);
+        if (
+            first_name === "" ||
+            last_name === "" ||
+            email === "" ||
+            password === ""
+        ) {
+            res.render("register", {
+                error: "Something went wrong, try again!",
+                red: "red",
+            });
+        } else {
+            console.log("line 63: ", req.body);
+            db.addUsers(first_name, last_name, email, newPass)
+                .then((userId) => {
+                    // console.log("user: ", userId.rows[0].id);
+                    let userNum = userId.rows[0].id;
+                    req.session.registered = true;
+                    req.session.signedIn = true;
+                    req.session.userId = userNum;
+                    res.redirect("/petition");
+                    return console.log("usersWorked");
+                })
+                .catch((err) => {
+                    console.log(err, "error in ad user");
+                    res.render("register", {
+                        error: "email in use, please use a different email",
+                        red: "red",
+                    });
+                });
+        }
+    });
+});
+
+app.get("/login", (req, res) => {
+    if (req.session.registered) {
+        res.redirect("/petition");
+    } else if (!req.session.registered) {
+        res.render("login");
+    } else {
+        res.redirect("/petition");
+    }
+});
+
+app.post("/login", (req, res) => {
+    db.getUsers().then((email) => {
+        console.log("LINE 96: ", email);
+    });
 });
 
 app.get("/petition", (req, res) => {
@@ -56,7 +115,7 @@ app.post("/petition", (req, res) => {
     firstName = req.body["first-name"];
     lastName = req.body["last-name"];
     signature = req.body.signature;
-    // console.log("line 32: ", req.body);
+    // console.log("line 58: ", req.body);
     if (firstName === "" || lastName === "" || signature === "") {
         res.render("petition", {
             error: "something went wrong, try again!",
@@ -77,7 +136,7 @@ app.post("/petition", (req, res) => {
             .catch((err) => {
                 console.log("error in add musician: ", err);
             });
-        // console.log("linte 45: ", firstName, lastName, signature);
+        // console.log("line 79: ", firstName, lastName, signature);
     }
 });
 

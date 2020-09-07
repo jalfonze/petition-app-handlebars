@@ -2,6 +2,21 @@ const spicedPg = require("spiced-pg");
 
 const db = spicedPg("postgres:postgres:postgres@localhost:5432/musicians-info");
 
+module.exports.getUsers = () => {
+    return db.query(`SELECT * FROM users`);
+};
+
+module.exports.addUsers = (firstname, lastname, email, pw) => {
+    return db.query(
+        `
+        INSERT INTO users (first_name, last_name, email, password)
+        VALUES ($1, $2, $3, $4)
+        RETURNING id
+        `,
+        [firstname, lastname, email, pw]
+    );
+};
+
 module.exports.getMusicians = () => {
     return db.query(`SELECT * FROM signatures`);
 };
