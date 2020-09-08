@@ -125,7 +125,7 @@ button:active {
 .nxtBtn {
     padding: 10px;
 }
-span {
+.numberSigners {
     animation-name: twinkle;
     color: chartreuse;
     animation-duration: 1s;

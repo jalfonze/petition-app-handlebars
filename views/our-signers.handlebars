@@ -1,17 +1,32 @@
 <nav></nav>
 <div class="main">
-<div class="titleSign">
-    <h1>Our Signers</h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos cupiditate magni corporis nesciunt libero autem sunt adipisci ratione iste exercitationem. Minus odio aspernatur in exercitationem, enim nam itaque architecto voluptatum.</p>
+    <div class="titleSign">
+        <h1>Our Signers</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos cupiditate magni corporis nesciunt libero autem sunt adipisci ratione iste exercitationem. Minus odio aspernatur in exercitationem, enim nam itaque architecto voluptatum.</p>
+    </div>
+    <div class="signersList">
+        {{#ourSigners}}
+        {{#if url}}
+        <h1> <a target="_blank" href="{{url}}">{{first_name}} {{last_name}}</a>{{#if age}}<span>, {{age}}</span>{{else}}{{/if}}</h1>
+        {{else}}
+        <h1>{{first_name}} {{last_name}}</h1>
+        {{/if}}
+        {{#if city}}
+        <h3>City: <a href="/our-signers/{{city}}">{{city}}</a></h3>
+        {{else}}
+        <h3></h3>
+        {{/if}}
+        <p>{{created}}</p>
+        <div class="linebreak"></div>
+        {{/ourSigners}}
+    </div> 
 </div>
-<div class="signersList">
-    {{#ourSigners}}
-    <h1>{{first}} {{last}}</h1>
-    <p>{{created_at}}</p>
-    <div class="linebreak"></div>
-    {{/ourSigners}}
 
+{{#cityMatch}}
+<div class="citySigners">
+    <h1>Here are the signers in the city you have chosen</h1>
+    <h1>{{first_name}} {{last_name}}, {{age}}</h1>
 </div>
-</div>
+{{/cityMatch}}
 
 

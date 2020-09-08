@@ -13,6 +13,34 @@ module.exports.getUsers = (email) => {
     );
 };
 
+module.exports.getUsersProfile = () => {
+    return db.query(
+        `
+    SELECT *
+    FROM users
+    JOIN user_profiles
+    ON users.id = user_profiles.user_id
+    JOIN signatures
+    ON users.id = signatures.user_id
+    `
+    );
+};
+
+module.exports.getCity = (city) => {
+    return db.query(
+        `
+    SELECT *
+    FROM users
+    JOIN user_profiles
+    ON users.id = user_profiles.user_id
+    JOIN signatures
+    ON users.id = signatures.user_id
+    WHERE LOWER (city) = LOWER($1)
+    `,
+        [city]
+    );
+};
+
 module.exports.addUsers = (firstname, lastname, email, pw) => {
     return db.query(
         `
@@ -24,6 +52,16 @@ module.exports.addUsers = (firstname, lastname, email, pw) => {
     );
 };
 
+module.exports.addProfile = (age, city, url, user_id) => {
+    return db.query(
+        `
+    INSERT INTO user_profiles (age, city, url, user_id)
+    VALUES ($1, $2, $3, $4)
+    `,
+        [age || null, city || null, url || null, user_id]
+    );
+};
+
 module.exports.getMusicians = () => {
     return db.query(`SELECT * FROM signatures`);
 };
@@ -31,7 +69,7 @@ module.exports.getMusicians = () => {
 module.exports.showSignature = (idNo) => {
     return db.query(
         `
-        SELECT signature, first
+        SELECT signature
         FROM signatures
         WHERE id = ($1)
         `,
@@ -39,13 +77,13 @@ module.exports.showSignature = (idNo) => {
     );
 };
 
-module.exports.addMusician = (first, last, sig) => {
+module.exports.addMusician = (userId, sig) => {
     return db.query(
         `
-    INSERT INTO signatures (first, last, signature)
-    VALUES ($1, $2, $3)
+    INSERT INTO signatures (user_id, signature)
+    VALUES ($1, $2)
     RETURNING id
     `, // dollar signs corresponds with each argument representing tha arguments in order they come in. Protects us from SQL injections // RETURN to get something back
-        [first, last, sig] // array goes hand in hand with dollar sign syntax
+        [userId, sig] // array goes hand in hand with dollar sign syntax
     );
 };
