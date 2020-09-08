@@ -148,13 +148,20 @@ app.get("/profile", (req, res) => {
 
 app.post("/profile", (req, res) => {
     let { age, city, url } = req.body;
-    // if (!url.startsWith("http://") || !url.startsWith("https://")) {
-    //     res.render("profile", {
-    //         error: "email not valid",
-    //         red: "red",
-    //     });
-    // console.log(req.body);
-    //}
+    if (url.slice(0, 4) === "www.") {
+        url = "https://" + url;
+    } else if (
+        url.slice(0, 7) === "http://" ||
+        url.slice(0, 8) === "https://"
+    ) {
+        url;
+    } else if (
+        url.slice(0, 7) !== "http://" ||
+        url.slice(0, 8) !== "https://"
+    ) {
+        url = "";
+    }
+    console.log(req.body);
     db.addProfile(age, city, url, userNum)
         .then(() => {
             console.log("add profile WORKED");
@@ -228,7 +235,7 @@ app.get("/our-signers", (req, res) => {
     db.getUsersProfile()
         .then((data) => {
             let ourSigners = data.rows;
-            console.log("OUR SIGNERS", ourSigners);
+            // console.log("OUR SIGNERS", ourSigners);
             res.render("our-signers", {
                 ourSigners,
             });
@@ -240,7 +247,7 @@ app.get("/our-signers/:city", (req, res) => {
     db.getCity(city)
         .then((result) => {
             let cityMatch = result.rows;
-            console.log("CITY MATCH: ", cityMatch);
+            // console.log("CITY MATCH: ", cityMatch);
             res.render("our-signers", {
                 cityMatch,
             });
