@@ -5,8 +5,12 @@
     <input type="number" min="0" max="99" name="age" value="" placeholder="age?">
     <p>City</p>
     <input type="text" name="city" value="" placeholder="Which city are you in?">
+    {{#if error}}
+    <h2 class="errMsg">{{error}}</h2>
+    {{else}}
     <p>Give us a URL</p>
     <input type="text" name="url" placeholder="Your URL" value="">
+    {{/if}}
     <p>click button to submit and move on to petition</p>
     <button>Submit</button>
 </form>

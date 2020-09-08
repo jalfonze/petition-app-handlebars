@@ -5,6 +5,16 @@
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos cupiditate magni corporis nesciunt libero autem sunt adipisci ratione iste exercitationem. Minus odio aspernatur in exercitationem, enim nam itaque architecto voluptatum.</p>
     </div>
     <div class="signersList">
+
+    <div class="citySigners">
+        {{#if cityMatch}}
+        <h1>Signers from  {{#cityMatch}} {{city}}  {{/cityMatch}}</h1>
+        {{#cityMatch}}
+            <h1>{{first_name}} {{last_name}}, {{age}}</h1>
+        {{/cityMatch}}
+        {{/if}}
+    </div>
+
         {{#ourSigners}}
         {{#if url}}
         <h1> <a target="_blank" href="{{url}}">{{first_name}} {{last_name}}</a>{{#if age}}<span>, {{age}}</span>{{else}}{{/if}}</h1>
@@ -22,11 +32,6 @@
     </div> 
 </div>
 
-{{#cityMatch}}
-<div class="citySigners">
-    <h1>Here are the signers in the city you have chosen</h1>
-    <h1>{{first_name}} {{last_name}}, {{age}}</h1>
-</div>
-{{/cityMatch}}
+
 
 

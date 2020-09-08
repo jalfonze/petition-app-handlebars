@@ -17,11 +17,11 @@ module.exports.getUsersProfile = () => {
     return db.query(
         `
     SELECT *
-    FROM users
+    FROM signatures
     JOIN user_profiles
-    ON users.id = user_profiles.user_id
-    JOIN signatures
-    ON users.id = signatures.user_id
+    ON signatures.user_id = user_profiles.user_id
+    JOIN users
+    ON signatures.user_id = users.id
     `
     );
 };
@@ -30,10 +30,10 @@ module.exports.getCity = (city) => {
     return db.query(
         `
     SELECT *
-    FROM users
+    FROM signatures
     JOIN user_profiles
-    ON users.id = user_profiles.user_id
-    JOIN signatures
+    ON signatures.user_id = user_profiles.user_id
+    JOIN users
     ON users.id = signatures.user_id
     WHERE LOWER (city) = LOWER($1)
     `,

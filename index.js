@@ -52,7 +52,6 @@ let userNum;
 
 app.post("/register", (req, res) => {
     let { first_name, last_name, email, password } = req.body;
-
     bc.hash(password).then((hashedPW) => {
         // console.log("HashedPW: ", hashedPW);
         req.body.password = hashedPW;
@@ -149,7 +148,13 @@ app.get("/profile", (req, res) => {
 
 app.post("/profile", (req, res) => {
     let { age, city, url } = req.body;
+    // if (!url.startsWith("http://") || !url.startsWith("https://")) {
+    //     res.render("profile", {
+    //         error: "email not valid",
+    //         red: "red",
+    //     });
     // console.log(req.body);
+    //}
     db.addProfile(age, city, url, userNum)
         .then(() => {
             console.log("add profile WORKED");

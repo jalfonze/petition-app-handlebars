@@ -173,6 +173,14 @@ button:active {
     background-color: white;
 }
 
+.citySigners {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+}
+
 /* FOOTER */
 
 footer {
