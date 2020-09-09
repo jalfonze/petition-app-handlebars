@@ -5,7 +5,7 @@ const bc = require("./bc");
 
 const handlebars = require("express-handlebars");
 const cookieSession = require("cookie-session");
-// const csurf = require("csurf");
+const csurf = require("csurf");
 
 app.engine("handlebars", handlebars());
 app.set("view engine", "handlebars");
@@ -22,15 +22,15 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
-// app.use(csurf);
+app.use(csurf());
 
-// app.use(function (req, res, next) {
-//     //csrfToken for templates
-//     res.locals.csrfToken = req.csrfToken();
-//     //prevents click jacking
-//     res.setHeader("x-frame-options", "deny");
-//     next();
-// });
+app.use(function (req, res, next) {
+    //csrfToken for templates
+    res.locals.csrfToken = req.csrfToken();
+    //prevents click jacking
+    res.setHeader("x-frame-options", "deny");
+    next();
+});
 
 app.use(express.static("./public"));
 
@@ -72,10 +72,9 @@ app.post("/register", (req, res) => {
             db.addUsers(first_name, last_name, email, newPass)
                 .then((resultObj) => {
                     // console.log("RESULTOBJ", resultObj.rows[0].id);
-                    userNum = resultObj.rows[0].id;
-                    req.session.userId = userNum;
-                    req.session.registeredId = userNum;
-                    req.session.loggedId = userNum;
+                    req.session.userId = resultObj.rows[0].id;
+                    userNum = req.session.userId;
+
                     res.redirect("/profile");
                     return console.log("usersWorked");
                 })
@@ -91,13 +90,7 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    if (req.session.loggedId) {
-        res.redirect("/petition");
-    } else if (req.session.userId) {
-        res.render("login");
-    } else {
-        res.redirect("/register");
-    }
+    res.render("login");
 });
 
 app.post("/login", (req, res) => {
@@ -213,9 +206,7 @@ app.get("/thank-you", (req, res) => {
         .then((signedData) => {
             db.getUsersProfile().then((data) => {
                 let numOfSigners = data.rows.length;
-                // console.log("num of signers: ", numOfSigners);
                 // let first = data.rows[0].first_name;
-                // console.log("first NAME: ", first);
                 let pic = signedData.rows[0].signature;
                 // console.log("SIGNATURE PIC: ", pic);
                 // console.log("num of signers: ", numOfSigners);
@@ -225,8 +216,6 @@ app.get("/thank-you", (req, res) => {
                     // first,
                 });
             });
-            // console.log("SIGNED DATA: ", signedData);
-            // console.log("SIGNATURE URL: ", signedData.rows[0].signature);
         })
         .catch((err) => console.log("error in get musicians thankyou", err));
 });
@@ -235,7 +224,7 @@ app.get("/our-signers", (req, res) => {
     db.getUsersProfile()
         .then((data) => {
             let ourSigners = data.rows;
-            // console.log("OUR SIGNERS", ourSigners);
+            console.log("OUR SIGNERS", ourSigners);
             res.render("our-signers", {
                 ourSigners,
             });
@@ -253,6 +242,18 @@ app.get("/our-signers/:city", (req, res) => {
             });
         })
         .catch((err) => console.log("error in signers :city: ", err));
+});
+
+app.get("/edit-profile", (req, res) => {
+    db.getCurrentUser(userNum)
+        .then((userData) => {
+            let uData = userData.rows;
+            console.log("CURRENT USER", uData);
+            res.render("edit-profile", {
+                uData,
+            });
+        })
+        .catch((err) => console.log("error in get edit-profile", err));
 });
 
 app.listen(8080, () => {

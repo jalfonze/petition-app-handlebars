@@ -1,0 +1,20 @@
+<h1>Edit your profile here</h1>
+
+{{#uData}}
+<form action="#" method="POST">
+    <h4>First Name</h4>
+    <input type="text" value="{{first_name}}">
+    <h4>Last Name</h4>
+    <input type="text" value="{{last_name}}">
+    <h4>Email</h4>
+    <input type="email" value="{{email}}">
+    <h4>Password</h4>
+    <input type="password" value="">
+    <h4>Age</h4>
+    <input type="number" min="0" max="99" name="age" value="{{age}}">
+    <h4>City</h4>
+    <input type="text" value="{{city}}">
+    <h4>URL</h4>
+    <input type="text" placeholder="Your URL" value="" pattern="https?://.*" title="Must include http:// or https://">
+</form>
+{{/uData}}

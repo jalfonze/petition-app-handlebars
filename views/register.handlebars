@@ -18,6 +18,7 @@
     <p>Password</p>
     <input type="password" name="password" value="" placeholder="Enter your password">
     <p>Click to Submit</p>
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <button>Submit</button>
 </form>
 <button> <a href="/login"> Already have an account? Click here!</a></button>

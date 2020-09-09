@@ -9,8 +9,9 @@
     <h2 class="errMsg">{{error}}</h2>
     {{else}}
     <p>Give us a URL</p>
-    <input type="text" name="url" placeholder="Your URL" value="">
+    <input type="text" name="url" placeholder="Your URL" value="" pattern="https?://.*" title="Must include http:// or https://">
     {{/if}}
     <p>click button to submit and move on to petition</p>
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <button>Submit</button>
 </form>
