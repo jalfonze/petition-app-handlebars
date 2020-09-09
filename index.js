@@ -111,7 +111,7 @@ app.post("/login", (req, res) => {
                             // console.log(result);
                             if (result) {
                                 console.log("WORKED");
-                                req.session.loggedId = userId;
+                                req.session.userId = userId;
                                 res.redirect("/petition");
                             } else {
                                 console.log("DENIED");
@@ -256,7 +256,7 @@ app.get("/edit-profile", (req, res) => {
         .catch((err) => console.log("error in get edit-profile", err));
 });
 
-app.listen(8080, () => {
+app.listen(process.envPORT || 8080, () => {
     console.log("petition server is listening...");
 });
 
