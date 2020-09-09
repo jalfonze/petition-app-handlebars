@@ -22,6 +22,10 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
+
+app.use((req, res, next) => {
+    next();
+});
 app.use(csurf());
 
 app.use(function (req, res, next) {
@@ -48,8 +52,6 @@ app.get("/register", (req, res) => {
     res.render("register");
 });
 
-let userNum;
-
 app.post("/register", (req, res) => {
     let { first_name, last_name, email, password } = req.body;
     bc.hash(password).then((hashedPW) => {
@@ -73,7 +75,6 @@ app.post("/register", (req, res) => {
                 .then((resultObj) => {
                     // console.log("RESULTOBJ", resultObj.rows[0].id);
                     req.session.userId = resultObj.rows[0].id;
-                    userNum = req.session.userId;
 
                     res.redirect("/profile");
                     return console.log("usersWorked");
@@ -155,7 +156,7 @@ app.post("/profile", (req, res) => {
         url = "";
     }
     console.log(req.body);
-    db.addProfile(age, city, url, userNum)
+    db.addProfile(age, city, url, req.session.userId)
         .then(() => {
             console.log("add profile WORKED");
         })
@@ -185,7 +186,7 @@ app.post("/petition", (req, res) => {
 
         console.log("line 44", "redirect back");
     } else {
-        db.addMusician(userNum, signature)
+        db.addMusician(req.session.userId, signature)
             .then((id) => {
                 signIdNo = id.rows[0].id;
                 console.log("signature ID number", signIdNo);
@@ -245,7 +246,7 @@ app.get("/our-signers/:city", (req, res) => {
 });
 
 app.get("/edit-profile", (req, res) => {
-    db.getCurrentUser(userNum)
+    db.getCurrentUser(req.session.userId)
         .then((userData) => {
             let uData = userData.rows;
             console.log("CURRENT USER", uData);
@@ -254,6 +255,22 @@ app.get("/edit-profile", (req, res) => {
             });
         })
         .catch((err) => console.log("error in get edit-profile", err));
+});
+
+app.post("/edit-profile", (req, res) => {
+    let { fname, lname, emailUpdate, ageU, cityU, urlU } = req.body;
+
+    db.updateUsers(fname, lname, req.session.userId, emailUpdate)
+        .then(() => {
+            db.updateProfile(ageU, cityU, urlU, req.session.userId)
+                .then(() => {
+                    console.log("UPDATE PROFILE WORKED");
+                })
+                .catch((err) => console.log("ERROR IN update profile", err));
+            console.log("UPDATE WORKED");
+            res.redirect("/thank-you");
+        })
+        .catch((err) => console.log("ERROR IN UPDATE USERS: ", err));
 });
 
 app.listen(process.env.PORT || 8080, () => {

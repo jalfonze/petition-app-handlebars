@@ -57,6 +57,30 @@ module.exports.getCurrentUser = (idNo) => {
     );
 };
 
+module.exports.updateUsers = (fname, lname, id, email) => {
+    return db.query(
+        `
+        UPDATE users
+        SET first_name = ($1), last_name = ($2), email = ($4)
+        WHERE id = ($3)
+        `,
+        [fname, lname, id, email]
+    );
+};
+
+module.exports.updateProfile = (age, city, url, id) => {
+    return db.query(
+        `
+        INSERT INTO user_profiles (age, city, url) 
+        VALUES ($1, $2, $3) 
+        ON CONFLICT (user_profiles.id)
+        DO UPDATE SET age = $1, city = $2, url = $3
+        WHERE user_profiles.user_id = ($4)
+        `,
+        [age, city, url, id]
+    );
+};
+
 module.exports.addUsers = (firstname, lastname, email, pw) => {
     return db.query(
         `

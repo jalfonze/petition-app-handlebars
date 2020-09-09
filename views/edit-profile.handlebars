@@ -1,20 +1,23 @@
 <h1>Edit your profile here</h1>
 
-{{#uData}}
 <form action="#" method="POST">
+{{#uData}}
     <h4>First Name</h4>
-    <input type="text" value="{{first_name}}">
+    <input type="text" value="{{first_name}}" name="fname">
     <h4>Last Name</h4>
-    <input type="text" value="{{last_name}}">
+    <input type="text" value="{{last_name}}" name="lname">
     <h4>Email</h4>
-    <input type="email" value="{{email}}">
+    <input type="email" value="{{email}}" name="emailUpdate">
     <h4>Password</h4>
-    <input type="password" value="">
+    <input type="password" value="" name="passwordU">
     <h4>Age</h4>
-    <input type="number" min="0" max="99" name="age" value="{{age}}">
+    <input type="number" min="0" max="99" name="ageU" value="{{age}}">
     <h4>City</h4>
-    <input type="text" value="{{city}}">
+    <input type="text" value="{{city}}" name="cityU">
     <h4>URL</h4>
-    <input type="text" placeholder="Your URL" value="" pattern="https?://.*" title="Must include http:// or https://">
-</form>
+    <input type="text" placeholder="Your URL" value="" name="urlU" pattern="https?://.*" title="Must include http:// or https://">
+    <p>click here to submit</p>
 {{/uData}}
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <button>Submit</button>
+</form>
