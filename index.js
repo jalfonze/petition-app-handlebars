@@ -256,7 +256,7 @@ app.get("/edit-profile", (req, res) => {
         .catch((err) => console.log("error in get edit-profile", err));
 });
 
-app.listen(process.envPORT || 8080, () => {
+app.listen(process.env.PORT || 8080, () => {
     console.log("petition server is listening...");
 });
 
