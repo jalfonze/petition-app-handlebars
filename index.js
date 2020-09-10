@@ -36,6 +36,34 @@ app.use(function (req, res, next) {
     next();
 });
 
+// app.use((req, res, next) => {
+//     if (
+//         !req.session.userId &&
+//         req.url !== "/register" &&
+//         req.url !== "/login"
+//     ) {
+//         res.redirect("/register");
+//     } else {
+//         next();
+//     }
+// });
+
+// app.use("/register", (req, res, next) => {
+//     if (req.session.userId) {
+//         res.redirect("/petition");
+//     } else {
+//         next();
+//     }
+// });
+
+// const loggedOutUser = (req, res, next) => {
+//     if (req.session.userId) {
+//         res.redirect("/petition");
+//     } else {
+//         next();
+//     }
+// };
+
 app.use(express.static("./public"));
 
 app.get("/", (req, res) => {
@@ -109,11 +137,22 @@ app.post("/login", (req, res) => {
                     bc.compare(passwordLogin, valid.rows[0].password).then(
                         (result) => {
                             let userId = valid.rows[0].id;
+                            req.session.userId = userId;
                             // console.log(result);
                             if (result) {
                                 console.log("WORKED");
-                                req.session.userId = userId;
-                                res.redirect("/petition");
+                                db.getUsers(emailLogin)
+                                    .then((signatures) => {
+                                        console.log(signatures.rows[0]);
+                                        if (signatures.rows[0].signature) {
+                                            req.session.signed = true;
+                                            req.session.userId = userId;
+                                            res.redirect("/petition");
+                                        }
+                                    })
+                                    .catch((err) =>
+                                        console.log("ERROR IN if signed: ", err)
+                                    );
                             } else {
                                 console.log("DENIED");
                                 res.render("login", {
@@ -203,20 +242,25 @@ app.post("/petition", (req, res) => {
 });
 
 app.get("/thank-you", (req, res) => {
-    db.showSignature(req.session.signId)
+    db.showSignature(req.session.userId)
         .then((signedData) => {
-            db.getUsersProfile().then((data) => {
-                let numOfSigners = data.rows.length;
-                // let first = data.rows[0].first_name;
-                let pic = signedData.rows[0].signature;
-                // console.log("SIGNATURE PIC: ", pic);
-                // console.log("num of signers: ", numOfSigners);
-                res.render("thank-you", {
-                    num: numOfSigners,
-                    pic,
-                    // first,
-                });
-            });
+            // console.log(signedData);
+            db.getUsersProfile()
+                .then((data) => {
+                    let numOfSigners = data.rows.length;
+                    // let first = data.rows[0].first_name;
+                    let pic = signedData.rows[0].signature;
+                    // console.log("SIGNATURE PIC: ", pic);
+                    // console.log("num of signers: ", numOfSigners);
+                    res.render("thank-you", {
+                        num: numOfSigners,
+                        pic,
+                        // first,
+                    });
+                })
+                .catch((err) =>
+                    console.log("ERROR IN get user profile  THANK YOU: ", err)
+                );
         })
         .catch((err) => console.log("error in get musicians thankyou", err));
 });
@@ -266,7 +310,9 @@ app.post("/edit-profile", (req, res) => {
                 .then(() => {
                     console.log("UPDATE PROFILE WORKED");
                 })
-                .catch((err) => console.log("ERROR IN update profile", err));
+                .catch((err) =>
+                    console.log("ERROR IN update profile", err, req.body)
+                );
             console.log("UPDATE WORKED");
             res.redirect("/thank-you");
         })

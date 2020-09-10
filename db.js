@@ -10,11 +10,25 @@ module.exports.getUsers = (email) => {
         `
     SELECT *
     FROM users
+    JOIN signatures
+    ON users.id = signatures.user_id
     WHERE email = ($1)
     `,
         [email]
     );
 };
+// module.exports.checkSignature = (email) => {
+//     return db.query(
+//         `
+//     SELECT *
+//     FROM users
+//     JOIN signatures
+//     ON users.id = signatures.user_id
+//     WHERE email = ($1)
+//     `,
+//         [email]
+//     );
+// };
 
 module.exports.getUsersProfile = () => {
     return db.query(
@@ -71,11 +85,10 @@ module.exports.updateUsers = (fname, lname, id, email) => {
 module.exports.updateProfile = (age, city, url, id) => {
     return db.query(
         `
-        INSERT INTO user_profiles (age, city, url) 
-        VALUES ($1, $2, $3) 
-        ON CONFLICT (user_profiles.id)
-        DO UPDATE SET age = $1, city = $2, url = $3
-        WHERE user_profiles.user_id = ($4)
+        INSERT INTO user_profiles (age, city, url, user_id)
+        VALUES ($1, $2, $3, $4) 
+        ON CONFLICT (user_id)
+        DO UPDATE SET age = $1, city = $2, url = $3, user_id = $4
         `,
         [age, city, url, id]
     );
