@@ -56,27 +56,22 @@ app.use(function (req, res, next) {
 //     }
 // });
 
-// const loggedOutUser = (req, res, next) => {
-//     if (req.session.userId) {
-//         res.redirect("/petition");
-//     } else {
-//         next();
-//     }
-// };
-
 app.use(express.static("./public"));
 
-app.get("/", (req, res) => {
-    if (req.session.userId) {
-        res.redirect("/login");
-    } else if (req.session.loggedId) {
+const loggedOutUser = (req, res, next) => {
+    if (req.session.userId && req.session.profile) {
         res.redirect("/petition");
+    } else if (!req.session.profile) {
+        res.redirect("/profile");
     } else {
-        res.redirect("/register");
+        next();
     }
+};
+app.get("/", (req, res) => {
+    res.redirect("/register");
 });
 
-app.get("/register", (req, res) => {
+app.get("/register", loggedOutUser, (req, res) => {
     res.render("register");
 });
 
@@ -104,6 +99,8 @@ app.post("/register", (req, res) => {
                     // console.log("RESULTOBJ", resultObj.rows[0].id);
                     req.session.userId = resultObj.rows[0].id;
 
+                    console.log("REQ USER ID: ", req.session.userId);
+
                     res.redirect("/profile");
                     return console.log("usersWorked");
                 })
@@ -118,7 +115,7 @@ app.post("/register", (req, res) => {
     });
 });
 
-app.get("/login", (req, res) => {
+app.get("/login", loggedOutUser, (req, res) => {
     res.render("login");
 });
 
@@ -136,17 +133,17 @@ app.post("/login", (req, res) => {
                 if (valid) {
                     bc.compare(passwordLogin, valid.rows[0].password).then(
                         (result) => {
-                            let userId = valid.rows[0].id;
+                            let userId = valid.rows[0].user_id;
                             req.session.userId = userId;
-                            // console.log(result);
+                            console.log("VALID: ", valid);
                             if (result) {
-                                console.log("WORKED");
+                                console.log("LOG IN WORKED");
                                 db.getUsers(emailLogin)
                                     .then((signatures) => {
                                         console.log(signatures.rows[0]);
                                         if (signatures.rows[0].signature) {
                                             req.session.signed = true;
-                                            req.session.userId = userId;
+                                            // req.session.userId = userId;
                                             res.redirect("/petition");
                                         }
                                     })
@@ -198,6 +195,7 @@ app.post("/profile", (req, res) => {
     db.addProfile(age, city, url, req.session.userId)
         .then(() => {
             console.log("add profile WORKED");
+            req.session.profile = true;
         })
         .catch((err) => console.log("error in add profile", err));
     res.redirect("/petition");
@@ -225,12 +223,15 @@ app.post("/petition", (req, res) => {
 
         console.log("line 44", "redirect back");
     } else {
+        console.log("MUSICIANS:", req.session.userId);
         db.addMusician(req.session.userId, signature)
             .then((id) => {
+                console.log("ADD MUSICIAN ID: ", id);
                 signIdNo = id.rows[0].id;
                 console.log("signature ID number", signIdNo);
                 req.session.signed = true;
                 req.session.signId = signIdNo;
+                console.log("REQ SESH SIGN ID: ", req.session.signId);
                 res.redirect("/thank-you");
                 return console.log("worked");
             })
@@ -242,9 +243,11 @@ app.post("/petition", (req, res) => {
 });
 
 app.get("/thank-you", (req, res) => {
+    console.log(req.session);
     db.showSignature(req.session.userId)
+
         .then((signedData) => {
-            // console.log(signedData);
+            console.log("SIGNED DATA", signedData);
             db.getUsersProfile()
                 .then((data) => {
                     let numOfSigners = data.rows.length;
@@ -263,6 +266,15 @@ app.get("/thank-you", (req, res) => {
                 );
         })
         .catch((err) => console.log("error in get musicians thankyou", err));
+});
+
+app.post("/thank-you", (req, res) => {
+    db.deleteSig(req.session.userId).then((sig) => {
+        console.log("SIG ROWS: ", sig.rows);
+        console.log("SIG ROWS: ", req.session);
+        req.session.signed = false;
+        res.redirect("/petition");
+    });
 });
 
 app.get("/our-signers", (req, res) => {
@@ -302,21 +314,55 @@ app.get("/edit-profile", (req, res) => {
 });
 
 app.post("/edit-profile", (req, res) => {
-    let { fname, lname, emailUpdate, ageU, cityU, urlU } = req.body;
-
-    db.updateUsers(fname, lname, req.session.userId, emailUpdate)
-        .then(() => {
-            db.updateProfile(ageU, cityU, urlU, req.session.userId)
+    let { fname, lname, emailUpdate, ageU, cityU, urlU, passwordU } = req.body;
+    if (!passwordU) {
+        db.updateUsers(fname, lname, req.session.userId, emailUpdate, passwordU)
+            .then(() => {
+                db.updateProfile(ageU, cityU, urlU, req.session.userId)
+                    .then(() => {
+                        console.log("UPDATE PROFILE NO PASS WORKED");
+                    })
+                    .catch((err) =>
+                        console.log(
+                            "ERROR IN update profile NO PASS",
+                            err,
+                            req.body
+                        )
+                    );
+                console.log("UPDATE WORKED");
+                res.redirect("/thank-you");
+            })
+            .catch((err) =>
+                console.log("ERROR IN UPDATE USERS NO PASS: ", err)
+            );
+    } else {
+        bc.hash(passwordU).then((newHashedPw) => {
+            console.log("NEW PW WORKED: ", newHashedPw);
+            db.updateUsersWPass(
+                fname,
+                lname,
+                req.session.userId,
+                emailUpdate,
+                newHashedPw
+            )
                 .then(() => {
-                    console.log("UPDATE PROFILE WORKED");
+                    db.updateProfile(ageU, cityU, urlU, req.session.userId)
+                        .then(() => {
+                            console.log("UPDATE PROFILE WORKED");
+                        })
+                        .catch((err) =>
+                            console.log(
+                                "ERROR IN update profile",
+                                err,
+                                req.body
+                            )
+                        );
+                    console.log("UPDATE WORKED");
+                    res.redirect("/thank-you");
                 })
-                .catch((err) =>
-                    console.log("ERROR IN update profile", err, req.body)
-                );
-            console.log("UPDATE WORKED");
-            res.redirect("/thank-you");
-        })
-        .catch((err) => console.log("ERROR IN UPDATE USERS: ", err));
+                .catch((err) => console.log("ERROR IN UPDATE USERS: ", err));
+        });
+    }
 });
 
 app.listen(process.env.PORT || 8080, () => {

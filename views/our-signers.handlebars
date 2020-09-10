@@ -8,7 +8,7 @@
 
     <div class="citySigners">
         {{#if cityMatch}}
-        <h1>Signers from  {{#cityMatch}} {{city}}  {{/cityMatch}}</h1>
+        <h1>Signers from {{city}} </h1>
         {{#cityMatch}}
             <h1>{{first_name}} {{last_name}}, {{age}}</h1>
         {{/cityMatch}}
@@ -18,7 +18,7 @@
         {{#if url}}
         <h1> <a target="_blank" href="{{url}}">{{first_name}} {{last_name}}</a>{{#if age}}<span>, {{age}}</span>{{else}}{{/if}}</h1>
         {{else}}
-        <h1>{{first_name}} {{last_name}}</h1>
+        <h1>{{first_name}} {{last_name}} {{#if age}}<span>, {{age}}</span>{{else}}{{/if}}</h1>
         {{/if}}
         {{#if city}}
         <h3>City: <a href="/our-signers/{{city}}">{{city}}</a></h3>

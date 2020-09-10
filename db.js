@@ -17,18 +17,6 @@ module.exports.getUsers = (email) => {
         [email]
     );
 };
-// module.exports.checkSignature = (email) => {
-//     return db.query(
-//         `
-//     SELECT *
-//     FROM users
-//     JOIN signatures
-//     ON users.id = signatures.user_id
-//     WHERE email = ($1)
-//     `,
-//         [email]
-//     );
-// };
 
 module.exports.getUsersProfile = () => {
     return db.query(
@@ -81,6 +69,16 @@ module.exports.updateUsers = (fname, lname, id, email) => {
         [fname, lname, id, email]
     );
 };
+module.exports.updateUsersWPass = (fname, lname, id, email, pw) => {
+    return db.query(
+        `
+        UPDATE users
+        SET first_name = ($1), last_name = ($2), email = ($4), password = ($5)
+        WHERE id = ($3)
+        `,
+        [fname, lname, id, email, pw]
+    );
+};
 
 module.exports.updateProfile = (age, city, url, id) => {
     return db.query(
@@ -124,13 +122,14 @@ module.exports.showSignature = (idNo) => {
         `
         SELECT signature
         FROM signatures
-        WHERE id = ($1)
+        WHERE user_id = ($1)
         `,
         [idNo]
     );
 };
 
 module.exports.addMusician = (userId, sig) => {
+    console.log("DB USER ID: ", userId);
     return db.query(
         `
     INSERT INTO signatures (user_id, signature)
@@ -138,5 +137,15 @@ module.exports.addMusician = (userId, sig) => {
     RETURNING id
     `, // dollar signs corresponds with each argument representing tha arguments in order they come in. Protects us from SQL injections // RETURN to get something back
         [userId, sig] // array goes hand in hand with dollar sign syntax
+    );
+};
+
+module.exports.deleteSig = (id) => {
+    return db.query(
+        `
+        DELETE FROM signatures
+        WHERE user_id = ($1)
+        `,
+        [id]
     );
 };
