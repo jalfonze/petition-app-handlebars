@@ -36,33 +36,11 @@ app.use(function (req, res, next) {
     next();
 });
 
-// app.use((req, res, next) => {
-//     if (
-//         !req.session.userId &&
-//         req.url !== "/register" &&
-//         req.url !== "/login"
-//     ) {
-//         res.redirect("/register");
-//     } else {
-//         next();
-//     }
-// });
-
-// app.use("/register", (req, res, next) => {
-//     if (req.session.userId) {
-//         res.redirect("/petition");
-//     } else {
-//         next();
-//     }
-// });
-
 app.use(express.static("./public"));
 
-const loggedOutUser = (req, res, next) => {
+const loggedInUser = (req, res, next) => {
     if (req.session.userId && req.session.profile) {
         res.redirect("/petition");
-    } else if (!req.session.profile) {
-        res.redirect("/profile");
     } else {
         next();
     }
@@ -71,11 +49,11 @@ app.get("/", (req, res) => {
     res.redirect("/register");
 });
 
-app.get("/register", loggedOutUser, (req, res) => {
+app.get("/register", loggedInUser, (req, res) => {
     res.render("register");
 });
 
-app.post("/register", (req, res) => {
+app.post("/register", loggedInUser, (req, res) => {
     let { first_name, last_name, email, password } = req.body;
     bc.hash(password).then((hashedPW) => {
         // console.log("HashedPW: ", hashedPW);
@@ -115,11 +93,11 @@ app.post("/register", (req, res) => {
     });
 });
 
-app.get("/login", loggedOutUser, (req, res) => {
+app.get("/login", loggedInUser, (req, res) => {
     res.render("login");
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", loggedInUser, (req, res) => {
     let { emailLogin, passwordLogin } = req.body;
     console.log("LOG IN req.body: ", req.body);
     if (emailLogin === "" || passwordLogin === "") {
@@ -195,7 +173,7 @@ app.post("/profile", (req, res) => {
     db.addProfile(age, city, url, req.session.userId)
         .then(() => {
             console.log("add profile WORKED");
-            req.session.profile = true;
+            console.log("REQSESSION PROFILE: ", req.session);
         })
         .catch((err) => console.log("error in add profile", err));
     res.redirect("/petition");
