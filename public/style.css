@@ -2,16 +2,38 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+.capitalize {
+    text-transform: capitalize;
+}
+
 body {
-    background: radial-gradient(
+    /* background: radial-gradient(
         circle,
         rgba(191, 108, 144, 1) 0%,
         rgba(119, 32, 20, 1) 100%
-    );
+    ); */
+    background-image: url(/images/puk-khantho-sWbGwr1fOUk-unsplash.jpg);
     color: antiquewhite;
+    font-family: "Quicksand", sans-serif;
 }
 nav {
     height: 70px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+nav a {
+    text-decoration: none;
+    color: rgb(71, 160, 93);
+}
+
+nav * {
+    padding: 20px;
+}
+
+.error {
+    color: red;
 }
 
 /* REGISTER PAGE */
@@ -21,11 +43,95 @@ nav {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    padding: 30px;
+}
+
+.register-header a {
+    text-decoration: none;
+    color: rgb(71, 160, 93);
+}
+
+.register-header h3 {
+    padding: 10px;
+}
+
+.registerForm * {
+    padding: 10px;
+}
+
+.registerBackground {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgba(156, 22, 22, 0.7);
+    padding: 20px;
+    border-radius: 10%;
+}
+
+/* LOGIN PAGE */
+
+.loginBgc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgba(156, 22, 22, 0.7);
+    padding: 20px;
+    border-radius: 10%;
+}
+
+.headerLogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 50px;
+}
+
+.headerLogin a {
+    text-decoration: none;
+    color: rgb(71, 160, 93);
+}
+.headerLogin h3 {
+    padding: 10px;
+}
+.loginForm * {
+    padding: 10px;
+}
+
+/* PROFILE */
+
+.profileHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 50px;
+}
+
+.profileForm * {
+    padding: 10px;
+}
+
+.profileBgc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgba(156, 22, 22, 0.7);
+    padding: 20px;
+    border-radius: 10%;
 }
 
 /* PETITION PAGE */
+.clearBtn {
+    outline: none;
+}
+
 #signHere {
     border: dotted black 2px;
+    background-color: #fff;
 }
 
 .red {
@@ -40,10 +146,12 @@ nav {
     padding: 40px;
 }
 
-.header p {
+.header h2 {
     width: 80%;
     text-align: center;
     padding: 30px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50px;
 }
 
 .main {
@@ -69,6 +177,8 @@ input {
     outline: none;
     padding: 7px;
     border-radius: 10px;
+    font-family: "Quicksand", sans-serif;
+    width: 250px;
 }
 .divBtn {
     padding: 10px;
@@ -133,6 +243,26 @@ button:active {
     animation-iteration-count: infinite;
 }
 
+.thankyou-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.thankyou-buttons a {
+    text-decoration: none;
+    color: rgb(66, 66, 66);
+}
+
+.thankyou-buttons * {
+    padding: 10px;
+}
+
+.delSig * {
+    padding: 10px;
+}
+
 @keyframes twinkle {
     50% {
         transform: scale(0.5);
@@ -150,12 +280,18 @@ button:active {
     padding: 20px;
 }
 
-.titleSign p {
+.titleSign h2 {
     width: 80%;
     padding: 10px;
+    text-align: center;
 }
 
-.signersList {
+.titleSign a {
+    text-decoration: none;
+    color: rgb(71, 160, 93);
+}
+
+.our-signers {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -163,15 +299,30 @@ button:active {
     padding: 10px;
 }
 
-.signersList p {
+.our-signers p {
     padding: 10px;
     font-size: 9pt;
 }
 
-.signersList .linebreak {
+.our-signers a {
+    text-decoration: none;
+    color: rgb(71, 160, 93);
+}
+
+.our-signers .linebreak {
     height: 2px;
     width: 200px;
     background-color: white;
+}
+
+.ourBgc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgba(156, 22, 22, 0.8);
+    padding: 20px;
+    border-radius: 20%;
 }
 
 .citySigners {
@@ -182,6 +333,53 @@ button:active {
     padding: 10px;
 }
 
+/* CITY SIGNERS */
+.citySigners h1 {
+    padding: 10px;
+}
+
+.citySigners h2 {
+    padding: 10px;
+}
+
+.cityBgc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgba(156, 22, 22, 0.7);
+    padding: 20px;
+    border-radius: 20%;
+}
+
+.cityBgc a {
+    text-decoration: none;
+    color: rgb(71, 160, 93);
+}
+
+/* EDIT PROFILE */
+.editHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 50px;
+}
+
+.editBgc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgba(156, 22, 22, 0.7);
+    /* padding: 20px; */
+    border-radius: 10%;
+}
+
+.editMain * {
+    padding: 5px;
+}
+
 /* FOOTER */
 
 footer {
@@ -189,4 +387,10 @@ footer {
     align-items: center;
     justify-content: center;
     padding: 20px;
+}
+
+footer p {
+    background-color: black;
+    border-radius: 10px;
+    padding: 5px;
 }

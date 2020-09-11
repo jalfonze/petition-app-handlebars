@@ -1,18 +1,18 @@
-<nav></nav>
+{{>nav}}
+
 <div class="mainThanks">
 <h1>Thank you for signing {{first}}!</h1>
-
 <h3>here is your signature...</h3>
 <img class="sigBox" src={{pic}} alt="signature">
-
-
-<h2> Thanks to you, we now have <span class="numberSigners">{{num}}</span> signers!</h2>
-<div class="nxtBtn">
-<button><a href="/our-signers">Click here to see the list of them!</a></button>
-<form action="#" method="POST">
-<input type="hidden" name="_csrf" value="{{csrfToken}}">
-<button>click here to delete your signature!</button>
-</form>
 </div>
 
-</div>
+        <div class="thankyou-buttons">
+            <h2> Thanks to you, we now have <span class="numberSigners">{{num}}</span> signers!</h2>
+            <button><a href="/our-signers">Here is a list of them!</a></button>
+        </div>
+
+        <form class="delSig" action="#" method="POST">
+             <input type="hidden" name="_csrf" value="{{csrfToken}}">
+             <p>Want to do your signature again?</p>
+             <button>Click here to delete your signature to re do it!</button>
+        </form>

@@ -1,8 +1,12 @@
-<h1>Here is your profile</h1>
+<div class="profileHeader">
+    <h1>Add a profile</h1>
+</div>
 
-<form action="#" method="POST">
+
+<form class="profileForm" action="#" method="POST">
+    <div class="profileBgc">
     <p>Age</p>
-    <input type="number" min="0" max="99" name="age" value="" placeholder="age?">
+    <input type="number" min="0" max="99" name="age" value="" placeholder="Age">
     <p>City</p>
     <input type="text" name="city" value="" placeholder="Which city are you in?">
     {{#if error}}
@@ -11,7 +15,11 @@
     <p>Give us a URL</p>
     <input type="text" name="url" placeholder="Your URL" value="" pattern="https?://.*" title="Must include http:// or https://">
     {{/if}}
-    <p>click button to submit and move on to petition</p>
+    <p>Click button to submit and move on to petition</p>
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <button>Submit</button>
+
+    <button>Add details</button>
+    <button>Skip</button>
+
+    </div>
 </form>

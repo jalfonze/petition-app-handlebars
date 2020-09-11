@@ -39,12 +39,25 @@ app.use(function (req, res, next) {
 app.use(express.static("./public"));
 
 const loggedInUser = (req, res, next) => {
-    if (req.session.userId && req.session.profile) {
+    if (req.session.userId) {
         res.redirect("/petition");
     } else {
         next();
     }
 };
+
+const loggedOutUser = (req, res, next) => {
+    if (
+        !req.session.userId &&
+        req.url !== "/register" &&
+        req.url !== "/login"
+    ) {
+        res.redirect("/register");
+    } else {
+        next();
+    }
+};
+
 app.get("/", (req, res) => {
     res.redirect("/register");
 });
@@ -150,11 +163,11 @@ app.post("/login", loggedInUser, (req, res) => {
     }
 });
 
-app.get("/profile", (req, res) => {
+app.get("/profile", loggedOutUser, (req, res) => {
     res.render("profile");
 });
 
-app.post("/profile", (req, res) => {
+app.post("/profile", loggedOutUser, (req, res) => {
     let { age, city, url } = req.body;
     if (url.slice(0, 4) === "www.") {
         url = "https://" + url;
@@ -179,7 +192,7 @@ app.post("/profile", (req, res) => {
     res.redirect("/petition");
 });
 
-app.get("/petition", (req, res) => {
+app.get("/petition", loggedOutUser, (req, res) => {
     if (req.session.signed) {
         res.redirect("thank-you");
     } else {
@@ -190,7 +203,7 @@ app.get("/petition", (req, res) => {
 let signature;
 let signIdNo;
 
-app.post("/petition", (req, res) => {
+app.post("/petition", loggedOutUser, (req, res) => {
     signature = req.body.signature;
     // console.log("line 58: ", req.body);
     if (signature === "") {
@@ -220,7 +233,7 @@ app.post("/petition", (req, res) => {
     }
 });
 
-app.get("/thank-you", (req, res) => {
+app.get("/thank-you", loggedOutUser, (req, res) => {
     console.log(req.session);
     db.showSignature(req.session.userId)
 
@@ -246,7 +259,7 @@ app.get("/thank-you", (req, res) => {
         .catch((err) => console.log("error in get musicians thankyou", err));
 });
 
-app.post("/thank-you", (req, res) => {
+app.post("/thank-you", loggedOutUser, (req, res) => {
     db.deleteSig(req.session.userId).then((sig) => {
         console.log("SIG ROWS: ", sig.rows);
         console.log("SIG ROWS: ", req.session);
@@ -255,7 +268,7 @@ app.post("/thank-you", (req, res) => {
     });
 });
 
-app.get("/our-signers", (req, res) => {
+app.get("/our-signers", loggedOutUser, (req, res) => {
     db.getUsersProfile()
         .then((data) => {
             let ourSigners = data.rows;
@@ -266,20 +279,22 @@ app.get("/our-signers", (req, res) => {
         })
         .catch((err) => console.log("error in get users profile", err));
 });
-app.get("/our-signers/:city", (req, res) => {
+app.get("/our-signers/:city", loggedOutUser, (req, res) => {
     const city = req.params.city;
+    console.log(city);
     db.getCity(city)
         .then((result) => {
             let cityMatch = result.rows;
             // console.log("CITY MATCH: ", cityMatch);
             res.render("our-signers", {
                 cityMatch,
+                cityName: city,
             });
         })
         .catch((err) => console.log("error in signers :city: ", err));
 });
 
-app.get("/edit-profile", (req, res) => {
+app.get("/edit-profile", loggedOutUser, (req, res) => {
     db.getCurrentUser(req.session.userId)
         .then((userData) => {
             let uData = userData.rows;
@@ -291,7 +306,7 @@ app.get("/edit-profile", (req, res) => {
         .catch((err) => console.log("error in get edit-profile", err));
 });
 
-app.post("/edit-profile", (req, res) => {
+app.post("/edit-profile", loggedOutUser, (req, res) => {
     let { fname, lname, emailUpdate, ageU, cityU, urlU, passwordU } = req.body;
     if (!passwordU) {
         db.updateUsers(fname, lname, req.session.userId, emailUpdate, passwordU)
@@ -341,6 +356,11 @@ app.post("/edit-profile", (req, res) => {
                 .catch((err) => console.log("ERROR IN UPDATE USERS: ", err));
         });
     }
+});
+
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/register");
 });
 
 app.listen(process.env.PORT || 8080, () => {

@@ -1,25 +1,28 @@
 <div class="register-header">
-    <h1>Please register here to sign out petition</h1>
+    <h1>MUSICIANS MUST SURVIVE!</h1>
+    <h1>Register now to sign the petition!</h1>
     <h3><a href="/login"> Already have an account? Click here!</a></h3>
 </div>
 
-<div class="main-register {{red}}">
-    <div class="error">
-        {{#if error}}
-    <h2 class="errMsg">{{error}}</h2>
-        {{/if}}
+<div class="main-register">
+        <form class="registerForm" action="#" method="POST">
+            <div class="registerBackground">
+            <div class="error">
+                {{#if error}}
+            <h2 class="errMsg">{{error}}</h2>
+                {{/if}}
+            </div>
+            <p>First name</p>
+            <input type="text" name="first_name" value="" placeholder="Enter your First Name">
+            <p>Last name</p>
+            <input type="text" name="last_name" value="" placeholder="Enter your Last Name">
+            <p>Email</p>
+            <input type="email" name="email" value="" placeholder="Enter your EMail">
+            <p>Password</p>
+            <input type="password" name="password" value="" placeholder="Enter your password" minlength="8">
+            <p>Click here to register your account</p>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button>Register</button>
     </div>
-<form action="#" method="POST">
-    <p>First name</p>
-    <input type="text" name="first_name" value="" placeholder="Enter your First Name">
-    <p>Last name</p>
-    <input type="text" name="last_name" value="" placeholder="Enter your Last Name">
-    <p>Email</p>
-    <input type="email" name="email" value="" placeholder="Enter your EMail">
-    <p>Password</p>
-    <input type="password" name="password" value="" placeholder="Enter your password">
-    <p>Click to Submit</p>
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <button>Submit</button>
-</form>
+        </form>
 </div>

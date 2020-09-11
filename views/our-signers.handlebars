@@ -1,35 +1,44 @@
-<nav></nav>
+{{>nav}}
 <div class="main">
     <div class="titleSign">
         <h1>Our Signers</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos cupiditate magni corporis nesciunt libero autem sunt adipisci ratione iste exercitationem. Minus odio aspernatur in exercitationem, enim nam itaque architecto voluptatum.</p>
+        <h2>Thank you so much for supporting our cause! It is already hard to live as a musician and I hope that this petition will help give musicians the respect and finance that they deserve for providing art and entertainment.</h2>
+        <h3> <a href="/thank-you"> Go back to see your signature </a> </h3>
     </div>
-    <div class="signersList">
+    
 
     <div class="citySigners">
+
         {{#if cityMatch}}
-        <h1>Signers from {{city}} </h1>
+        <div class="cityBgc">
+        <h3><a href="/our-signers"> Go back to signers</a></h3>
+        <h1 class="capitalize">Signers from {{cityName}} </h1>
+        <div class="linebreak"></div>
         {{#cityMatch}}
-            <h1>{{first_name}} {{last_name}}, {{age}}</h1>
+            <h2 class="capitalize">{{first_name}} {{last_name}}, {{age}}</h2>
         {{/cityMatch}}
+        </div>
         {{/if}}
     </div>
+    <div class="our-signers">
+        <div class="ourBgc">
+
         {{#ourSigners}}
         {{#if url}}
-        <h1> <a target="_blank" href="{{url}}">{{first_name}} {{last_name}}</a>{{#if age}}<span>, {{age}}</span>{{else}}{{/if}}</h1>
+        <h1 class="capitalize"> <a target="_blank" href="{{url}}">{{first_name}} {{last_name}}</a>{{#if age}}<span>, {{age}}</span>{{else}}{{/if}}</h1>
         {{else}}
         <h1>{{first_name}} {{last_name}} {{#if age}}<span>, {{age}}</span>{{else}}{{/if}}</h1>
         {{/if}}
         {{#if city}}
-        <h3>City: <a href="/our-signers/{{city}}">{{city}}</a></h3>
+        <h3 class="capitalize">City: <a href="/our-signers/{{city}}">{{city}}</a></h3>
         {{else}}
         <h3></h3>
         {{/if}}
         <p>{{created}}</p>
         <div class="linebreak"></div>
         {{/ourSigners}}
-    </div> 
-    <button> <a href="/edit-profile">edit profile here </a></button>
+        </div>
+    </div>
 </div>
 
 

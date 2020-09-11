@@ -1,8 +1,8 @@
-<nav></nav>
+{{>nav}}
 
 <div class="header">
     <h1>Sign Our Petition!</h1>
-    <p>We are petitioning to make sure that every bar or vanue that have musicians play at their establishment get paid! You wouldn't go to a restaurant and ask for free food now would you?</p>
+    <h2>We are petitioning to make sure that every bar or venue that have musicians play at their establishment pay their musicians! You wouldn't go to a restaurant and ask for free food now would you?</h2>
 </div>
 
 <div class="main {{red}}">
@@ -16,6 +16,7 @@ method="POST">
     <button>Submit</button>
     </div>
 </form>
+    {{!-- <button class="clearBtn">Clear</button> --}}
     <div class="error">
         {{#if error}}
     <h2 class="errMsg">{{error}}</h2>

@@ -1,20 +1,23 @@
 <div class="headerLogin">
 <h1>Please enter your credentials to log in</h1>
+<h3><a href="/register"> Don't have an account? Click here to register!</a></h3>
 </div>
 
-<div class="mainLogin {{red}}">
+<div class="mainLogin">
+<form class="loginForm" action="#" method="POST">
+    <div class="loginBgc">
     <div class="error">
         {{#if error}}
     <h2 class="errMsg">{{error}}</h2>
         {{/if}}
     </div>
-<form action="#" method="POST">
     <p>Email</p>
     <input type="email" name="emailLogin" value="" placeholder="Type email here">
     <p>Password</p>
     <input type="password" name="passwordLogin" value="" placeholder="Type password here">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <p>Click to submit</p>
-    <button>Submit</button>
+    <p>Click to Log In</p>
+    <button>Log In</button>
+    </div>
 </form>
 </div>

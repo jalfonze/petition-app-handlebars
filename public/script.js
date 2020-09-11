@@ -3,6 +3,7 @@
     const backDrop = canvas.getContext("2d");
     const ctx = canvas.getContext("2d");
     let hiddenInput = document.getElementById("inputHidden");
+    const clear = document.querySelector(".clearButton");
 
     // console.log("hiddeninput Value: ", hiddenInputValue);
     console.log("hiddeninput Value new: ", hiddenInput.value);
@@ -20,6 +21,14 @@
         console.log("dataUrl: ", dataURL);
         hiddenInput.value = dataURL;
         ctx.beginPath();
+    });
+
+    canvas.addEventListener("mouseenter", () => {
+        ctx.beginPath();
+    });
+
+    canvas.addEventListener("mouseleave", () => {
+        signature = false;
     });
 
     backDrop.beginPath();
