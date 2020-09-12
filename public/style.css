@@ -149,9 +149,12 @@ nav * {
 .header h2 {
     width: 80%;
     text-align: center;
-    padding: 30px;
+    padding: 20px;
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 50px;
+}
+.header h1 {
+    padding: 10px;
 }
 
 .main {
