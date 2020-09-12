@@ -360,6 +360,7 @@ button:active {
     background-color: rgba(156, 22, 22, 0.7);
     padding: 20px;
     border-radius: 20%;
+    text-align: center;
 }
 
 .cityBgc a {
@@ -374,6 +375,7 @@ button:active {
     align-items: center;
     flex-direction: column;
     padding: 50px;
+    text-align: center;
 }
 
 .editBgc {
@@ -395,6 +397,7 @@ button:active {
     justify-content: center;
     align-items: center;
     padding: 40px;
+    text-align: center;
 }
 
 .delprofile a {
@@ -442,7 +445,17 @@ footer p {
         text-align: center;
         font-size: 12pt;
     }
-    .ourBgc h3 {
+    .ourBgc {
         text-align: center;
+        font-size: 9pt;
+    }
+
+    .cityBgc {
+        text-align: center;
+        font-size: 9pt;
+    }
+
+    .profileBgc {
+        width: 85%;
     }
 }
