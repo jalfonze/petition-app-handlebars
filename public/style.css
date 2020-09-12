@@ -3,6 +3,10 @@
     box-sizing: border-box;
 }
 
+button {
+    outline: none;
+}
+
 .capitalize {
     text-transform: capitalize;
 }
@@ -288,6 +292,9 @@ button:active {
     justify-content: center;
     flex-direction: column;
     padding: 20px;
+    background-color: rgba(0, 0, 0, 0.74);
+    border-radius: 30px;
+    width: 80%;
 }
 
 .titleSign h2 {
@@ -332,7 +339,7 @@ button:active {
     flex-direction: column;
     background-color: rgba(156, 22, 22, 0.8);
     padding: 20px;
-    border-radius: 20%;
+    border-radius: 40px;
 }
 
 .citySigners {
@@ -359,7 +366,7 @@ button:active {
     flex-direction: column;
     background-color: rgba(156, 22, 22, 0.7);
     padding: 20px;
-    border-radius: 20%;
+    border-radius: 20px;
     text-align: center;
 }
 
@@ -385,7 +392,7 @@ button:active {
     flex-direction: column;
     background-color: rgba(156, 22, 22, 0.7);
     /* padding: 20px; */
-    border-radius: 10%;
+    border-radius: 20px;
 }
 
 .editMain * {
@@ -398,12 +405,14 @@ button:active {
     align-items: center;
     padding: 40px;
     text-align: center;
+    font-size: 10pt;
 }
 
 .delprofile a {
     text-decoration: none;
     color: rgb(71, 160, 93);
     background-color: black;
+    border-radius: 10px;
 }
 
 /* DELETE PROFILE */
@@ -413,6 +422,18 @@ button:active {
     justify-content: center;
     align-items: center;
     padding: 40px;
+    text-align: center;
+}
+
+.keepBtn a {
+    color: #3b3b3b;
+}
+
+.keepBtn {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* FOOTER */
