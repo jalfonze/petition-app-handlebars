@@ -11,7 +11,7 @@
     // console.log("line 7 script: ", dataURL);
     backDrop.beginPath();
     backDrop.fillStyle = "rgb(230, 227, 227)";
-    backDrop.fillRect(0, 0, 400, 70);
+    backDrop.fillRect(0, 0, 350, 90);
 
     let signature = false;
 

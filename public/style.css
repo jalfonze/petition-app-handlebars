@@ -44,6 +44,7 @@ nav * {
     align-items: center;
     flex-direction: column;
     padding: 30px;
+    text-align: center;
 }
 
 .register-header a {
@@ -87,6 +88,7 @@ nav * {
     align-items: center;
     flex-direction: column;
     padding: 50px;
+    text-align: center;
 }
 
 .headerLogin a {
@@ -124,6 +126,10 @@ nav * {
     border-radius: 10%;
 }
 
+.profileForm p {
+    text-align: center;
+}
+
 /* PETITION PAGE */
 .clearBtn {
     outline: none;
@@ -146,7 +152,7 @@ nav * {
     padding: 40px;
 }
 
-.header h2 {
+.header .petMsg {
     width: 80%;
     text-align: center;
     padding: 20px;
@@ -251,6 +257,7 @@ button:active {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    text-align: center;
 }
 
 .thankyou-buttons a {
@@ -418,4 +425,24 @@ footer p {
     background-color: black;
     border-radius: 10px;
     padding: 5px;
+}
+
+@media screen and (max-width: 500px) {
+    .header .petMsg {
+        width: 90%;
+        text-align: center;
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 50px;
+        font-size: 12pt;
+    }
+    .titleSign h2 {
+        width: 80%;
+        padding: 10px;
+        text-align: center;
+        font-size: 12pt;
+    }
+    .ourBgc h3 {
+        text-align: center;
+    }
 }
