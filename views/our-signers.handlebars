@@ -18,10 +18,12 @@
             <h2 class="capitalize">{{first_name}} {{last_name}}, {{age}}</h2>
         {{/cityMatch}}
         </div>
-        {{/if}}
+        {{else}}
     </div>
     <div class="our-signers">
         <div class="ourBgc">
+
+
 
         {{#ourSigners}}
         {{#if url}}
@@ -37,6 +39,8 @@
         <p>{{created}}</p>
         <div class="linebreak"></div>
         {{/ourSigners}}
+
+        {{/if}}
         </div>
     </div>
 </div>
