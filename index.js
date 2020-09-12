@@ -58,6 +58,14 @@ const loggedOutUser = (req, res, next) => {
     }
 };
 
+const signedUser = (req, res, next) => {
+    if (!req.session.signed) {
+        res.redirect("/petition");
+    } else {
+        next();
+    }
+};
+
 app.get("/", (req, res) => {
     res.redirect("/register");
 });
@@ -134,7 +142,6 @@ app.post("/login", loggedInUser, (req, res) => {
                                         console.log(signatures.rows[0]);
                                         if (signatures.rows[0].signature) {
                                             req.session.signed = true;
-                                            // req.session.userId = userId;
                                             res.redirect("/petition");
                                         }
                                     })
@@ -215,6 +222,7 @@ app.post("/petition", loggedOutUser, (req, res) => {
         console.log("line 44", "redirect back");
     } else {
         console.log("MUSICIANS:", req.session.userId);
+        console.log(req.session);
         db.addMusician(req.session.userId, signature)
             .then((id) => {
                 console.log("ADD MUSICIAN ID: ", id);
@@ -233,7 +241,7 @@ app.post("/petition", loggedOutUser, (req, res) => {
     }
 });
 
-app.get("/thank-you", loggedOutUser, (req, res) => {
+app.get("/thank-you", loggedOutUser, signedUser, (req, res) => {
     console.log(req.session);
     db.showSignature(req.session.userId)
 
@@ -259,7 +267,7 @@ app.get("/thank-you", loggedOutUser, (req, res) => {
         .catch((err) => console.log("error in get musicians thankyou", err));
 });
 
-app.post("/thank-you", loggedOutUser, (req, res) => {
+app.post("/thank-you", loggedOutUser, signedUser, (req, res) => {
     db.deleteSig(req.session.userId).then((sig) => {
         console.log("SIG ROWS: ", sig.rows);
         console.log("SIG ROWS: ", req.session);
@@ -268,7 +276,7 @@ app.post("/thank-you", loggedOutUser, (req, res) => {
     });
 });
 
-app.get("/our-signers", loggedOutUser, (req, res) => {
+app.get("/our-signers", loggedOutUser, signedUser, (req, res) => {
     db.getUsersProfile()
         .then((data) => {
             let ourSigners = data.rows;
@@ -279,7 +287,7 @@ app.get("/our-signers", loggedOutUser, (req, res) => {
         })
         .catch((err) => console.log("error in get users profile", err));
 });
-app.get("/our-signers/:city", loggedOutUser, (req, res) => {
+app.get("/our-signers/:city", loggedOutUser, signedUser, (req, res) => {
     const city = req.params.city;
     console.log(city);
     db.getCity(city)
@@ -358,6 +366,18 @@ app.post("/edit-profile", loggedOutUser, (req, res) => {
     }
 });
 
+app.get("/delete", (req, res) => {
+    res.render("delete", {});
+});
+
+app.post("/delete", (req, res) => {
+    db.deleteUser(req.session.userId)
+        .then(() => {
+            req.session = null;
+            res.redirect("/register");
+        })
+        .catch((err) => console.log("ERROR IN delet user: ", err));
+});
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/register");

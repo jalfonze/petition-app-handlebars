@@ -380,6 +380,28 @@ button:active {
     padding: 5px;
 }
 
+.delprofile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.delprofile a {
+    text-decoration: none;
+    color: rgb(71, 160, 93);
+    background-color: black;
+}
+
+/* DELETE PROFILE */
+
+.deleteUser {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
 /* FOOTER */
 
 footer {

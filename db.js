@@ -149,3 +149,13 @@ module.exports.deleteSig = (id) => {
         [id]
     );
 };
+
+module.exports.deleteUser = (id) => {
+    return db.query(
+        `
+        DELETE FROM users
+        WHERE id = ($1)
+        `,
+        [id]
+    );
+};
