@@ -58,6 +58,8 @@ nav * {
 
 .register-header h3 {
     padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50px;
 }
 
 .registerForm * {
@@ -300,6 +302,9 @@ button:active {
 .titleSign h2 {
     width: 80%;
     padding: 10px;
+    text-align: center;
+}
+.titleSign h3 {
     text-align: center;
 }
 
