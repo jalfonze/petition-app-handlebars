@@ -60,6 +60,7 @@ module.exports.getCurrentUser = (idNo) => {
 };
 
 module.exports.updateUsers = (fname, lname, id, email) => {
+    console.log("DBDBDB: ", lname);
     return db.query(
         `
         UPDATE users
@@ -88,7 +89,7 @@ module.exports.updateProfile = (age, city, url, id) => {
         ON CONFLICT (user_id)
         DO UPDATE SET age = $1, city = $2, url = $3, user_id = $4
         `,
-        [age, city, url, id]
+        [age || null, city || null, url || null, id]
     );
 };
 
